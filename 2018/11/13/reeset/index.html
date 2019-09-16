@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="">
+  <meta name="author" content="Hashub">
+  <meta name="keywords" content="">
+  <title>treeset集合 ~ Hashub</title>
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css?v=5.7.2">
+  <link rel="stylesheet" href="/lib/mdbootstrap/css/bootstrap.min.css?v=4.3.1">
+  <link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css?v=4.8.7">
+  <link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css">
+  <link rel="stylesheet" href="/lib/nprogress/nprogress.css?v=0.2.0">
+  <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+  
+    <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+  
+  <link rel="stylesheet" href="/css/main.css">
+
+  
+</head>
+
+
+<body>
+  <header style="height: 100vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>Hashub</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+</nav>
+
+    <div class="view intro-2"
+         style="background: url('https://s2.ax1x.com/2019/09/16/nRidsI.jpg')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              <p>星期二, 十一月 13日 2018, 12:15 凌晨</p>
+            
+          </div>
+
+          
+            <div class="scroll-down-bar">
+              <i class="fa fa-angle-down scroll-down-arrow"></i>
+            </div>
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto">
+          <div class="markdown-body">
+            <h1 id="TreeSet"><a href="#TreeSet" class="headerlink" title="TreeSet"></a>TreeSet</h1><h2 id="概述："><a href="#概述：" class="headerlink" title="概述："></a>概述：</h2><blockquote>
+<p>TreeSet是SortedSet接口的实现类，TreeSet可以确保集合元素处于排序状态，它与HashSet的区别是，HashSet是根据hash算法来决定元素的存储位置，而TreeSet是采用红黑树的数据结构来存储集合元素。</p>
+</blockquote>
+<h3 id="两种排序：自然排序、定制排序"><a href="#两种排序：自然排序、定制排序" class="headerlink" title="两种排序：自然排序、定制排序"></a>两种排序：自然排序、定制排序</h3><h3 id="1-自然排序"><a href="#1-自然排序" class="headerlink" title="1. 自然排序"></a>1. 自然排序</h3><blockquote>
+<p>一个接口，一个方法：java提供了一个Comparable接口，在该接口定义了一个compareTo（Object obj）的方法，该方法返回一个整数值，实现该接口的类必须实现该方法。当一个对象调用该方法与另一个对象进行比较的时候，例如：obj1.compareTo（obj2），如果该方法返回0，则表明这两个对象相等，如果返回一个正整数，则表明ojb1大于obj2，若返回一个负整数，则表明obj1小于obj2。</p>
+</blockquote>
+<p>如果要把一个对象元素添加到TreeSet中，该对象的类必须实现Comparable接口，否则程序会抛异常。</p>
+<p><strong>提醒：第一个元素无需实现Comparable接口。在TreeSet集合中连续添加对象必须是同类型对象</strong></p>
+<a id="more"></a>
+<ul>
+<li>当把一个对象添加到TreeSet集合中时，TreeSet调用该对象的compareTo（object obj）方法与集合中其他对象比较，然后根据红红黑树结构找到它的存储位置，若对象相等则无法添加到TreeSet集合中。</li>
+</ul>
+<hr>
+<h3 id="2-定制排序"><a href="#2-定制排序" class="headerlink" title="2.定制排序"></a>2.定制排序</h3><blockquote>
+<p>上面说了自然排序，自然排序时根据集合元素大小进行升序排序，如果要进行像降序排序则需要用到定制排序。</p>
+</blockquote>
+<blockquote>
+<p>实现定制排序则需要在创建TreeSet集合对象时，提供一个Comparator对象与该TreeSet集合关联，由该Comparator对象负责集合元素的排序逻辑。（可以使用Lambda表达式来代替Comparator对象）</p>
+</blockquote>
+<pre><code>TreeSet ts = new TreeSet((o1,o2) -&gt;{
+
+M m1 = (M)o1;
+
+M m2 = (M)o2;
+
+return m1.age &gt;m2.age ? -1: m1.age&lt;m2.age ? 1:0;});
+</code></pre><h3 id="要点总结："><a href="#要点总结：" class="headerlink" title="要点总结："></a>要点总结：</h3><ol>
+<li>TreeSet采用红黑树的数据结构来存储集合元素可以确保集合元素处于排序状态（自然排序为升序，要其他排序需要用定制排序）</li>
+<li>一个接口，一个方法，一个实现，一个必须：</li>
+</ol>
+<ul>
+<li>java提供了一个Comparable接口</li>
+<li>在该接口定义了一个compareTo（Object obj）</li>
+<li>一个对象元素添加到TreeSet中，该对象的类必须实现Comparable接口</li>
+<li>在TreeSet集合中连续添加对象必须是同类型对象</li>
+</ul>
+<h2 id="HashSet与TreeSet比较"><a href="#HashSet与TreeSet比较" class="headerlink" title="HashSet与TreeSet比较"></a>HashSet与TreeSet比较</h2><ol>
+<li>HashSet性能比TreeSet好，体现在常用的添加、查询等操作，TreeSet需要红黑树算法来维护排序</li>
+<li>对于LinkedHashSet来说，由于存在链表，所以遍历会更快。</li>
+<li>对于普通的插入、删除操作，LinkedHashSet比HashSet要慢，因为由于维护链表的存在会造成额外的开销。</li>
+</ol>
+<p>参考：疯狂java讲义、CSDN博客</p>
+<hr>
+<p><strong>未完待续</strong></p>
+<p>意见和建议欢迎➡右下角联系我</p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            
+              <p>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/java%E9%9B%86%E5%90%88">java集合</a>
+                  &nbsp;
+                
+              </p>
+            
+            <p>
+              <i class="iconfont icon-tag"></i>
+              
+                <a class="hover-with-bg" href="/tags/TreeSet">TreeSet</a>
+              
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+    <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+  </a>
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/mdbootstrap/js/jquery-3.4.1.min.js"></script>
+<script src="/lib/mdbootstrap/js/popper.min.js"></script>
+<script src="/lib/mdbootstrap/js/bootstrap.min.js?v=4.3.1"></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js?v=4.8.7"></script>
+<script src="/lib/nprogress/nprogress.min.js?v=0.2.0"></script>
+<script src="/js/main.js"></script>
+
+  
+    <script src="/lib/tocbot/tocbot.min.js?v=4.7.0"></script>
+  
+  <script src="/js/post.js"></script>
+
+
+  <script src="/lib/prettify/prettify.min.js?v=0.1.0"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint linenums');
+      prettyPrint();
+    })
+  </script>
+
+
+  <script src="/lib/typed/typed.min.js?v=2.0.9"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "treeset集合&nbsp;",
+      ],
+      cursorChar: "",
+      typeSpeed: 160,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+  <script src="/lib/anchor/anchor.min.js?v=4.2.0"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+</body>
+</html>

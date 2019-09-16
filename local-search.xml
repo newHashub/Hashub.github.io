@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+  
+  <entry>
+    <title>java自增变量</title>
+    <link href="undefined2019/01/04/ava%E8%87%AA%E5%A2%9E%E5%8F%98%E9%87%8F/"/>
+    <url>2019/01/04/ava%E8%87%AA%E5%A2%9E%E5%8F%98%E9%87%8F/</url>
+    
+    <content type="html"><![CDATA[<h1 id="先看一道面试题"><a href="#先看一道面试题" class="headerlink" title="先看一道面试题"></a>先看一道面试题</h1><pre><code>public static void main(String[] args) {        int i = 1;        i = i++;                            //1        int j = i++;                        //2        int k = i + ++i * i++;              //3        System.out.println(&quot;i=&quot; + i);        System.out.println(&quot;j=&quot; + j);        System.out.println(&quot;k=&quot; + k);    }</code></pre><pre><code>输出结果：i=4j=1k=11</code></pre><a id="more"></a><hr><p>1.</p><pre><code>    i = i++; </code></pre><ul><li>把i的值压入操作数栈<br><strong>此时操作栈数为1，局部变量表i=1</strong></li><li>i变量自增1<br><strong>此时是对局部变量表操作，局部变量表i=2</strong></li><li>把操作数栈中的值赋值给i<br><strong>此时将操作栈数1赋值给局部变量表i，即i=2被覆盖，i=1.</strong></li></ul><p><strong>运行完上面一句代码后i=1</strong></p><hr><p>2.</p><pre><code>int j = i++;  </code></pre><p><strong>同第一句代码一样执行，在最后赋值时，操作栈数1赋值给局部变量表j，则 j=1.而i在局部变量仍为2</strong></p><p><strong>运行完上面一句代码后j=1，i=2</strong></p><hr><p>3.</p><pre><code>int k = i + ++i * i++; </code></pre><ul><li>把i的值压入操作数栈<br><strong>操作数栈值为2</strong></li><li>i变量自增1<br><strong>局部变量表i=3</strong></li><li>把i的值压入操作数栈<br><strong>操作数栈值为3</strong></li><li>把i的值压入操作数栈<br><strong>操作数栈值为3</strong></li><li>i变量自增1<br><strong>局部变量表i=4</strong></li><li>把操作数栈中前两个弹出求乘积结果再压入栈<br><strong>操作数栈值为3X3=9</strong></li><li>把操作数栈中的值弹出求和再赋值给k<br><strong>操作数栈值为9+2=11</strong></li></ul><p><strong>即最后运行结果为：</strong></p><pre><code>i=4j=1k=11</code></pre><hr><p><strong>总结：</strong></p><p><strong>1. 等号右边的从左到右加载值依次压入操作数栈</strong></p><p><strong>2. 自增、自减操作都是直接修改变量的值，不经过操作数栈<br>最后的赋值之前，临时结果也是存储在操作数栈中</strong></p><p>参考：CSDN博客、尚硅谷面试题</p><hr><p><strong>未完待续</strong></p><p>意见和建议欢迎➡右下角联系我</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Java</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>java自增变量</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>单例模式</title>
+    <link href="undefined2018/12/06/%E4%BE%8B%E6%A8%A1%E5%BC%8F/"/>
+    <url>2018/12/06/%E4%BE%8B%E6%A8%A1%E5%BC%8F/</url>
+    
+    <content type="html"><![CDATA[<h1 id="单例模式（Singleton）"><a href="#单例模式（Singleton）" class="headerlink" title="单例模式（Singleton）"></a>单例模式（Singleton）</h1><pre><code> 确保一个类只有一个实例。 使用一个私有构造函数、一个私用静态变量、一个公有静态函数来实现</code></pre><ul><li>私有构造函数保证了不能通过构造函数来创建实例，只能通过公有静态函数来返回唯一的私有静态变量</li></ul><h2 id="1-懒汉式-线程不安全"><a href="#1-懒汉式-线程不安全" class="headerlink" title="1. 懒汉式-线程不安全"></a>1. 懒汉式-线程不安全</h2><pre><code>public class Singleton {    private static Singleton uniqueInstance;    private Singleton (){    }    public static Singleton getuniqueInstance() {        if (uniqueInstance == null) {            uniqueInstance = new Singleton();        }        return uniqueInstance;    }}</code></pre><a id="more"></a><ul><li>以上代码是线程不安全的懒汉式单例。私有静态变量uniqueInstance被延迟实例化，如果没用到该类，那么就不会实例化该私有静态变量。从而节约资源。</li><li>但是再多线程下，多个线程同时进入，遇到if判断为null。那么多个线程就会创建多个私有静态变量。导致实例化多次uniqueInstance。</li></ul><h2 id="2-懒汉式-线程安全"><a href="#2-懒汉式-线程安全" class="headerlink" title="2. 懒汉式-线程安全"></a>2. 懒汉式-线程安全</h2><pre><code>public class Singleton {    private static synchronized Singleton uniqueInstance;    private Singleton (){    }    public static Singleton getuniqueInstance() {        if (uniqueInstance == null) {            uniqueInstance = new Singleton();        }        return uniqueInstance;    }}</code></pre><ul><li>要使懒汉式线程安全只要再getuniqueInstance（）方法加锁，保证一个时间点只有一个线程能够进去该方法。避免多次实例化该变量。</li><li>==但是当一个线程进入该方法后，之后所有的线程都必须等待，这会使线程阻塞时间过长，影响性能。==</li></ul><h2 id="3-饿汉式-线程安全"><a href="#3-饿汉式-线程安全" class="headerlink" title="3. 饿汉式-线程安全"></a>3. 饿汉式-线程安全</h2><pre><code>private static Singleton uniqueInstance = new Singleton();</code></pre><ul><li>==线程安全的饿汉式采取直接实例化，但是丢失了延迟实例化带来的节约资源的好处。==</li></ul><h2 id="4-双重校验锁-线程安全"><a href="#4-双重校验锁-线程安全" class="headerlink" title="4. 双重校验锁-线程安全"></a>4. 双重校验锁-线程安全</h2><pre><code>public class Singleton {    private volatile static  Singleton uniqueInstance;    private Singleton (){    }    public static Singleton getuniqueInstance() {        if (uniqueInstance == null) {            synchronized (Singleton.class) {                if(uniqueInstance == null) {                    uniqueInstance = new Singleton();                }            }        }        return uniqueInstance;    }}</code></pre><ul><li>在第二点懒汉式-线程安全的基础上我们只有让私有静态变量实例化一次就可以使用，那么加锁操作只需要对实例化那部分进行加锁操作即可。即只有当私有静态变量没有被实例化的时候才需要加锁。</li><li>第一个if判断是否已经存在私有变量实例，在两个线程都进入第一个判断语句。线程阻塞，在第一个进入第二个if判断之后实例化私有静态变量，在第二个线程进来之后判断语句不为空就不会多次实例化私有静态变量。</li></ul><h3 id="volatile关键字"><a href="#volatile关键字" class="headerlink" title="==volatile关键字=="></a>==volatile关键字==</h3><p>在上面的代码中uniqueInstance用volatile关键修饰。为什么？</p><p>uniqueInstance = new Singleton();这段代码有三个执行步骤</p><ol><li>为uniqueInstance分配内存空间</li><li>初始化uniqueInstance</li><li>将uniqueInstance指向分配的内存地址</li></ol><p>以上这三步在JVM不是按序执行的，这是因为JVM有指令重排的特性，在单线程下没有问题，但是在多线程下，T1线程未初始化变量，T2调用getuniqueInstance（）则判断uniqueInstance不为空，此时uniqueInstance并未初始化。因此需要使用volatile关键字禁止JVM的指令重排，保证多线程下能正常运行。</p><h2 id="5-静态内部类（懒汉式）"><a href="#5-静态内部类（懒汉式）" class="headerlink" title="5. 静态内部类（懒汉式）"></a>5. 静态内部类（懒汉式）</h2><pre><code>public class Singleton {    private Singleton() {    }    private static class SingletonHolder {        private static final Singleton INSTANCE = new Singleton();    }    public static Singleton getUniqueInstance() {        return SingletonHolder.INSTANCE;    }}</code></pre><ul><li>当 Singleton 类加载时，静态内部类 SingletonHolder 没有被加载进内存。只有当调用getUniqueInstance()方法时触发 SingletonHolder.INSTANCE SingletonHolder才会被加载，此时初始化 INSTANCE 实例，并且 JVM 能确保 INSTANCE 只被实例化一次。</li><li>==这种方式不仅具有延迟初始化的好处，而且由 JVM 提供了对线程安全的支持。==</li></ul><h2 id="6-枚举实现（饿汉式最简洁）"><a href="#6-枚举实现（饿汉式最简洁）" class="headerlink" title="6. 枚举实现（饿汉式最简洁）"></a>6. 枚举实现（饿汉式最简洁）</h2><pre><code>public enum SingletonDemo {        INSTANCE;}</code></pre><p><a href="https://www.cnblogs.com/cielosun/p/6596475.html" target="_blank" rel="noopener">枚举实现单例模式</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>设计模式</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>单例模式</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>treeset集合</title>
+    <link href="undefined2018/11/13/reeset/"/>
+    <url>2018/11/13/reeset/</url>
+    
+    <content type="html"><![CDATA[<h1 id="TreeSet"><a href="#TreeSet" class="headerlink" title="TreeSet"></a>TreeSet</h1><h2 id="概述："><a href="#概述：" class="headerlink" title="概述："></a>概述：</h2><blockquote><p>TreeSet是SortedSet接口的实现类，TreeSet可以确保集合元素处于排序状态，它与HashSet的区别是，HashSet是根据hash算法来决定元素的存储位置，而TreeSet是采用红黑树的数据结构来存储集合元素。</p></blockquote><h3 id="两种排序：自然排序、定制排序"><a href="#两种排序：自然排序、定制排序" class="headerlink" title="两种排序：自然排序、定制排序"></a>两种排序：自然排序、定制排序</h3><h3 id="1-自然排序"><a href="#1-自然排序" class="headerlink" title="1. 自然排序"></a>1. 自然排序</h3><blockquote><p>一个接口，一个方法：java提供了一个Comparable接口，在该接口定义了一个compareTo（Object obj）的方法，该方法返回一个整数值，实现该接口的类必须实现该方法。当一个对象调用该方法与另一个对象进行比较的时候，例如：obj1.compareTo（obj2），如果该方法返回0，则表明这两个对象相等，如果返回一个正整数，则表明ojb1大于obj2，若返回一个负整数，则表明obj1小于obj2。</p></blockquote><p>如果要把一个对象元素添加到TreeSet中，该对象的类必须实现Comparable接口，否则程序会抛异常。</p><p><strong>提醒：第一个元素无需实现Comparable接口。在TreeSet集合中连续添加对象必须是同类型对象</strong></p><a id="more"></a><ul><li>当把一个对象添加到TreeSet集合中时，TreeSet调用该对象的compareTo（object obj）方法与集合中其他对象比较，然后根据红红黑树结构找到它的存储位置，若对象相等则无法添加到TreeSet集合中。</li></ul><hr><h3 id="2-定制排序"><a href="#2-定制排序" class="headerlink" title="2.定制排序"></a>2.定制排序</h3><blockquote><p>上面说了自然排序，自然排序时根据集合元素大小进行升序排序，如果要进行像降序排序则需要用到定制排序。</p></blockquote><blockquote><p>实现定制排序则需要在创建TreeSet集合对象时，提供一个Comparator对象与该TreeSet集合关联，由该Comparator对象负责集合元素的排序逻辑。（可以使用Lambda表达式来代替Comparator对象）</p></blockquote><pre><code>TreeSet ts = new TreeSet((o1,o2) -&gt;{M m1 = (M)o1;M m2 = (M)o2;return m1.age &gt;m2.age ? -1: m1.age&lt;m2.age ? 1:0;});</code></pre><h3 id="要点总结："><a href="#要点总结：" class="headerlink" title="要点总结："></a>要点总结：</h3><ol><li>TreeSet采用红黑树的数据结构来存储集合元素可以确保集合元素处于排序状态（自然排序为升序，要其他排序需要用定制排序）</li><li>一个接口，一个方法，一个实现，一个必须：</li></ol><ul><li>java提供了一个Comparable接口</li><li>在该接口定义了一个compareTo（Object obj）</li><li>一个对象元素添加到TreeSet中，该对象的类必须实现Comparable接口</li><li>在TreeSet集合中连续添加对象必须是同类型对象</li></ul><h2 id="HashSet与TreeSet比较"><a href="#HashSet与TreeSet比较" class="headerlink" title="HashSet与TreeSet比较"></a>HashSet与TreeSet比较</h2><ol><li>HashSet性能比TreeSet好，体现在常用的添加、查询等操作，TreeSet需要红黑树算法来维护排序</li><li>对于LinkedHashSet来说，由于存在链表，所以遍历会更快。</li><li>对于普通的插入、删除操作，LinkedHashSet比HashSet要慢，因为由于维护链表的存在会造成额外的开销。</li></ol><p>参考：疯狂java讲义、CSDN博客</p><hr><p><strong>未完待续</strong></p><p>意见和建议欢迎➡右下角联系我</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>java集合</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>TreeSet</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>hashset集合</title>
+    <link href="undefined2018/11/08/ashset%E9%9B%86%E5%90%88/"/>
+    <url>2018/11/08/ashset%E9%9B%86%E5%90%88/</url>
+    
+    <content type="html"><![CDATA[<h1 id="java集合"><a href="#java集合" class="headerlink" title="java集合"></a>java集合</h1><h2 id="一、-java集合类：实现常用的数据结构（栈，队列）"><a href="#一、-java集合类：实现常用的数据结构（栈，队列）" class="headerlink" title="一、 java集合类：实现常用的数据结构（栈，队列）"></a>一、 java集合类：实现常用的数据结构（栈，队列）</h2><h4 id="大致可以分为四种体系：set，list，queue，map"><a href="#大致可以分为四种体系：set，list，queue，map" class="headerlink" title="大致可以分为四种体系：set，list，queue，map"></a>大致可以分为四种体系：set，list，queue，map</h4><table><thead><tr><th>set</th><th>list</th><th>map</th><th>queue</th></tr></thead><tbody><tr><td>无序，不可重复</td><td>有序，重复</td><td>映射关系的集合-key-value</td><td>队列</td></tr></tbody></table><h2 id="二、-java集合类接口-Collection-Map接口继承树"><a href="#二、-java集合类接口-Collection-Map接口继承树" class="headerlink" title="二、.java集合类接口-Collection-Map接口继承树"></a>二、.java集合类接口-Collection-Map接口继承树</h2><h3 id="1-Collection接口继承树"><a href="#1-Collection接口继承树" class="headerlink" title="1.Collection接口继承树"></a>1.Collection接口继承树</h3><p><img src="https://upload-images.jianshu.io/upload_images/4593481-5f3d24d66b5b93ab.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><a id="more"></a><h3 id="2-Map接口继承树"><a href="#2-Map接口继承树" class="headerlink" title="2.Map接口继承树"></a>2.Map接口继承树</h3><p><img src="https://upload-images.jianshu.io/upload_images/4593481-797e013f79fb3228.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><h2 id="三、Set集合详解"><a href="#三、Set集合详解" class="headerlink" title="三、Set集合详解"></a>三、Set集合详解</h2><hr><h4 id="1-概述："><a href="#1-概述：" class="headerlink" title="1. 概述："></a>1. 概述：</h4><p>&emsp;&emsp;set集合类似于一个箱子，程序把各对象放进箱子里面，通常是没有办法记住放进箱子对象的先后顺序，各个对象在箱子里随意摆放。而且不允许把相同的元素对象放进同一个箱子。<strong>还有一点值得注意的是</strong>:不建议把可变对象放进箱子里，因为后面程序如果修改可变对象可能导致可变对象与箱子里其他对象相等，箱子无法准确找到这个对象。</p><h4 id="2-HashSet类"><a href="#2-HashSet类" class="headerlink" title="2. HashSet类"></a>2. HashSet类</h4><p>&emsp;&emsp;HashSet类是Set类的典型实现，HashSet按照Hash算法来存储集合中的元素，因此具有很好的存取和查找性能。</p><h4 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h4><ul><li>无法保证元素的顺序；</li><li>HashSet不是同步的(线程不安全)，若多个线程同时访问一个HashSet，修改了这个集合，则必须要用代码来保证其同步；</li><li>其值可为null；</li></ul><h4 id="问题一："><a href="#问题一：" class="headerlink" title="问题一："></a>问题一：</h4><p>HashSet是如何判断两个元素相等的？</p><blockquote><p>首先我们要明白，当在HashSet存入一个元素的时候，HashSet会调用该对象的hashCode()方法来得到该对象的hashCode值，然后根据该hashCode值来确定该对象的在HashSet的存储位置。</p></blockquote><blockquote><p>当HashSet判断两个元素是否相等的时候，首先是让两个对象通过equals()方法比较相等，再比较两个对象的hashCode()方法的返回值相等，同时满足以上两个条件时则两个元素相等。</p></blockquote><blockquote><p>这里有个有趣的现象，两个元素通过equals()方法比较返回true的时候，要是它们的hashCode()方法返回值不相等，HashSet将把它们存储在不同的位置，依然可以添加成功。</p></blockquote><ul><li>值得注意的是，当需要把某个类的对象保存到HashSet集合中，重写这个类的equals()方法时，应该尽量保证两个对象通过equals()方法比较返回true时，它们的hashCode()方法返回值也相等。</li></ul><p><strong>拓展：</strong></p><p>为什么HashSet里面add的时候，不可以add相同的值？（为什么可以用HashSet的这个不重复的值的特性来去重复呢？）</p><blockquote><p>HashSet的值是存储在一个HashMap的key里面的。正好HashMap的key是不能重复的。HashMap在add()时候，若key没有存值，则存进去，返回oldValue；此值初始值是null；<br>若key已经有值了，那么add成功也返回oldValue，此时key有值，若HashSet的add中 == null 则会返回false，set的add失败。</p></blockquote><hr><p>为什么要用HashSet去重复的时候，要重写hashcode()和equals()方法？</p><blockquote><p>重写equals的目的是：让两个对象引用地址不一样，但内容一样的对象是相等的。</p></blockquote><blockquote><p>重写hashCode的目：让ObjectA.equals(ObjectB)为true的两个对象的hashCode返回值一样。</p></blockquote><hr><h5 id="3-LinkedHashSet类"><a href="#3-LinkedHashSet类" class="headerlink" title="3.LinkedHashSet类"></a>3.LinkedHashSet类</h5><h5 id="概述："><a href="#概述：" class="headerlink" title="概述："></a>概述：</h5><blockquote><p>&emsp;&emsp;LinkedHashSet集合也是根据元素的hashCode值来决定元素的存储位置。但是它同时使用链表维护元素的次序（按照插入顺序来保存），即当遍历LinkedHashSet里的元素的时候，LinkedHashSet会按照插入顺序来访问LinkedHashSet集合里的元素。</p></blockquote><p>参考：疯狂java讲义、CSDN博客</p><hr><p><strong>未完待续</strong></p><p>意见和建议欢迎➡右下角联系我</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>java集合</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>hashtet</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>恭喜IG荣获英雄联盟S8全球总决赛冠军</title>
+    <link href="undefined2018/11/05/%E6%83%B3/"/>
+    <url>2018/11/05/%E6%83%B3/</url>
+    
+    <content type="html"><![CDATA[<hr><p><img src="https://upload-images.jianshu.io/upload_images/4593481-2b825be205999ddf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><hr><p><strong>IG牛逼</strong></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>日常</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>英雄联盟</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>hexo+github部署搭建个人网站踩坑超全记录</title>
+    <link href="undefined2018/11/05/hexo+github%E9%83%A8%E7%BD%B2%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E8%B8%A9%E5%9D%91%E8%B6%85%E5%85%A8%E8%AE%B0%E5%BD%95/"/>
+    <url>2018/11/05/hexo+github%E9%83%A8%E7%BD%B2%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E8%B8%A9%E5%9D%91%E8%B6%85%E5%85%A8%E8%AE%B0%E5%BD%95/</url>
+    
+    <content type="html"><![CDATA[<p>上个图先<br><img src="https://upload-images.jianshu.io/upload_images/4593481-688c762a2199b9a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"><br>这是最后成功的预览图 地址是：blog.zhashub.com</p><p>先说一下大致的步骤：</p><ul><li>先在本地搭建好hexo</li><li>再把本地的hexo部署到github<br>是不是很简单（呸，等下你就知道多少坑了）<a id="more"></a>本地的hexo搭建：</li><li>安装Git Bash（这个不会装那就算了吧，接下来的不适合你）</li><li>安装NodeJs（<a href="http://nodejs.cn/" target="_blank" rel="noopener">http://nodejs.cn/</a> 傻瓜式安装，应该不难对你来说）</li><li>在本地新建一个空文件夹（英文目录）</li><li>右键git bash进入</li></ul><p><img src="https://upload-images.jianshu.io/upload_images/4593481-907c14b38e406bf4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><p> 输入：</p><pre><code>npm -v //检查npm是否安装成功</code></pre><p><img src="https://upload-images.jianshu.io/upload_images/4593481-dfddcdc73a0a90cd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><ol start="5"><li>安装hexo</li></ol><pre><code>npm install hexo-cli -g //这里是利用node的npm来下载hexohexo -v  //这里-v是查看版本的意思</code></pre><p><img src="https://upload-images.jianshu.io/upload_images/4593481-e499dff2079e2a2f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><pre><code>hexo init //初始化hexo</code></pre><hr><p><strong>去你新建的文件夹可以看到很多文件,到这里hexo是安装成功了</strong><br><img src="https://upload-images.jianshu.io/upload_images/4593481-e6acc6cdb285cc14.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><hr><p>接下来再切换到你的git bash</p><pre><code>hexo ghexo s</code></pre><p>这里会提示：</p><pre><code>INFO Hexo is running at http://0.0.0.0:4000/. Press Ctrl+C to stop.</code></pre><p>这时候打开–<a href="http://0.0.0.0:4000/" target="_blank" rel="noopener">http://0.0.0.0:4000/</a></p><p>你就可以看到hexo的网页了<br><img src="https://upload-images.jianshu.io/upload_images/4593481-2a3b13763483ce16.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><p>到这一步那基本的hexo算是在本地搭建成功了，接下来看看怎么更换主题，毕竟私人博客总得漂亮点！</p><hr><p>这里我用的是next主题</p><p>百度搜索：<strong>next主题</strong></p><p><img src="https://upload-images.jianshu.io/upload_images/4593481-2740afe60978e91f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><p>两种方式下载主题：</p><ul><li>一、使用GIT<br><img src="https://upload-images.jianshu.io/upload_images/4593481-d2b2a275bef61796.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></li><li>二、下载解压包并解压到themes下面</li></ul><p>（注意如果有二级目录的话就要删掉一级目录，保证进去next文件夹里面就是一堆文件）<br><img src="https://upload-images.jianshu.io/upload_images/4593481-b367144164545e31.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><p>无论哪种方式请确保你下载的路径是<strong>在\themes下面</strong></p><p><img src="https://upload-images.jianshu.io/upload_images/4593481-bb64790c4f1f029a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"><br>上面的next就是我下载的，只是把名字换成了next。</p><p><strong>再次提醒要注意next里面可能会有两层目录，要去掉一层确保next文件夹在themes目录下</strong></p><hr><p>回到你文件主目录找到_config.yml用编辑器打开</p><p><img src="https://upload-images.jianshu.io/upload_images/4593481-bb356dc740aa8cae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><p>找到theme，把它后面改为，theme: next</p><p><img src="https://upload-images.jianshu.io/upload_images/4593481-f637c1ab85adad8d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><p>在这个配置文件你可以修改一些基本的配置</p><p><img src="https://upload-images.jianshu.io/upload_images/4593481-c0e7b8b3f918db3a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><p>接下来查看一下效果</p><ul><li>切换到git bash，输入</li></ul><pre><code>hexo cleanhexo ghexo s</code></pre><p>等待运行完毕后打开网址–<a href="http://0.0.0.0:4000/" target="_blank" rel="noopener">http://0.0.0.0:4000/</a></p><p>不出意料应该是next的主题网站了<br><img src="https://upload-images.jianshu.io/upload_images/4593481-9e548171f5b20f79.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><p>至此，在本地搭建个性化next主题的hexo个人博客算是完成了</p><hr><p><strong>二、接下在是最最最（也不是很麻烦的）部署到GitHub上面</strong></p><p>在github（没有GitHub的话，注册呗~）新建仓库<br><img src="https://upload-images.jianshu.io/upload_images/4593481-a73ec57167ae50f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><p>下面这一步一定要特别小心，把仓库名字一定要写成 ”你的用户名.github.io“<br><img src="https://upload-images.jianshu.io/upload_images/4593481-3203cf8a74e1a6c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><p>打开设置<br><img src="https://upload-images.jianshu.io/upload_images/4593481-715b42d1ec566f1f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><p>拉到下面github page <strong>选择master branch 记住要 save（保存）</strong><br><img src="https://upload-images.jianshu.io/upload_images/4593481-1dd779b3c1587cd7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><p>到这里，远端的仓库算是创建好了</p><hr><p>接下来，回到你文件的主目录，右键git bash 输入</p><pre><code>git init   /初始化仓库</code></pre><p>初始化完，先放一放</p><p>回到_config.yml配置文件，找到deploy：</p><p><img src="https://upload-images.jianshu.io/upload_images/4593481-d37915eb0b74a03c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><pre><code>deploy:  type: git  repository: https://github.com/newHashub/hashub.github.io.git  branch: master</code></pre><p>repository: <a href="https://github.com/newHashub/hashub.github.io.git" target="_blank" rel="noopener">https://github.com/newHashub/hashub.github.io.git</a></p><p>上面从https开始的这个地址在你GitHub上，直接复制粘贴<br><img src="https://upload-images.jianshu.io/upload_images/4593481-1485072fd1acd8c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><p>接下来切回git bash </p><p>输入</p><pre><code>npm install hexo-deployer-git --savehexo ghexo d</code></pre><p>稍等它在将本地的项目put到远端的github，（这里涉及到ssh密钥，或者要登录你的GitHub，或者设置你的邮箱，之类的，在这里不多赘述，网上有教程。）</p><p>回到刚才GitHub设置的页面，打开下面的地址。<br><img src="https://upload-images.jianshu.io/upload_images/4593481-faba00dbdc8fb881.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><hr><p><strong>不出意料，你会开心的像个孩子！</strong></p><p><img src="https://upload-images.jianshu.io/upload_images/4593481-bdc025fea067624f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p><hr><p><strong>至此在使用hexo搭建博客并部署到GitHub算是基本完成了！撒花!</strong></p><p>但是！！！</p><p>没完！！！</p><p>接下来补充几个坑：</p><hr><ul><li>输入hexo init后出现FATAL</li></ul><p>你误删文件了，或者顺序不对，可以试试下面这个方法</p><pre><code>hexo init &lt;新文件夹&gt;cd &lt;新文件夹&gt;hexo setup</code></pre><p>换句话说就是先别创建文件夹 而是使用hexo init创建文件夹</p><hr><ul><li>fatal: unable to access ‘<a href="https://github.com/greenplum-db/gporca.git/&#39;" target="_blank" rel="noopener">https://github.com/greenplum-db/gporca.git/&#39;</a>: gnutls_handshake() failed: A TLS packet with unexpected length was received.</li></ul><p>git bash上重置本机git设置git config –global credential.helper store</p><p>以上还不行的话，应该是涉及到SSH，具体上网百度，这里提供你百度的方向（SSH）。</p><hr><ul><li>使用Git出现HttpRequestException encountered错误</li></ul><p>主要原因是Github禁用了TLS v1.0 and v1.1这种弱加密标准，手动更新Windows的git凭证管理器即可，下载Git在Window上的凭证管理器并默认安装</p><hr><ul><li>输入hexo d 后出现 ERROR Deployer not found: git</li></ul><p>没输入下面这个：</p><pre><code>npm install --save hexo-deployer-git</code></pre><hr><p>以上，待补充，欢迎骚扰<a href="mailto:zht_bb0864@163.com" target="_blank" rel="noopener">zht_bb0864@163.com</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>博客</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>hexo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="undefined2018/11/03/hello-world/"/>
+    <url>2018/11/03/hello-world/</url>
+    
+    <content type="html"><![CDATA[<p><img src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&amp;quality=100&amp;size=b4000_4000&amp;sec=1568304433&amp;di=b234a248601e665630b25feb313b3add&amp;src=http://b-ssl.duitang.com/uploads/item/201509/05/20150905230752_FB3cs.jpeg" alt=""></p><p>Welcome to myblog! </p><p>Talk is cheap show me the code!</p><p>Let’s change the world together!</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  
+</search>
